@@ -1,3 +1,10 @@
+/*
+Names: Xavier Lachance, Carter Hendricks
+UCIDs: 30164639, 30176218
+Assignment 5
+Group 09
+*/
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
