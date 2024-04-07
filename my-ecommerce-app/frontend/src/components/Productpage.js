@@ -1,25 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Header from './Header';
 import ProductList from './ProductList';
 import Cart from './Cart';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../App';
 
 const Productpage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [productsData, setProductsData] = useState([]);
-  const [loginStatus, setLoginStatus] = useState(() => {
-    const savedStatus = localStorage.getItem('loginStatus');
-    return savedStatus === 'true'; // Returns true if savedStatus is 'true', false otherwise
-  });
+  const { authenticated } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
   // Check if user has access to page
   useEffect(() => {
-    console.log("Login status:", loginStatus);
-    if (!loginStatus) {
+    console.log("Login status:", authenticated);
+    if (!authenticated) {
       console.error("Error 401: User not logged in. Redirecting to login page.");
       navigate("/login");
     }

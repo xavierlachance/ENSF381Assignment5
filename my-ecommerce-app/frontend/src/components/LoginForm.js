@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import SignupForm from './SignupForm';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../App';
 
 const LoginForm = () => {
     const [showSignup, setShowSignup] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loginMessage, setLoginMessage] = useState('');
-    const [loginStatus, setLoginStatus] = useState(() => {
-        const savedStatus = localStorage.getItem('loginStatus');
-        return savedStatus === 'true'; // Returns true if savedStatus is 'true', false otherwise
-    });
+    const { setAuthenticated } = useContext(AuthContext); // Use context to set authenticated state in App.js
+    const navigate = useNavigate();
 
     const handleSwitch = () => {
         setShowSignup(true);
@@ -24,8 +23,7 @@ const LoginForm = () => {
         setPassword(event.target.value);
     };
 
-    const navigate = useNavigate(); // Apparently this line is needed?
-
+    
     const handleLoginSubmit = async (event) => {
         event.preventDefault();
 
@@ -48,16 +46,14 @@ const LoginForm = () => {
         })
             .then(response => {
                 if (response.ok) {
+                    setAuthenticated(true);
                     setLoginMessage('User logged in successfully!');
                     setUsername('');
                     setPassword('');
-                    setLoginStatus(true);
-                    localStorage.setItem('loginStatus', 'true');
-                    navigate("/products"); // Not too sure why this is needed or if there is an alternative, but we got it working so we will keep it
+                    navigate("/products");
                     return response.json();
                 } else {
-                    setLoginStatus(false);
-                    localStorage.setItem('loginStatus', 'false');
+                    setAuthenticated(false);
                     setLoginMessage('Username and/or password incorrect!');
                     throw new Error('Username and/or password incorrect! ' + response.status);
                 }

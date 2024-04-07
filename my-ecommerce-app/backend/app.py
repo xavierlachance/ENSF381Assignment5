@@ -97,8 +97,8 @@ def login():
     userData = request.get_json()
     for user in users:
         if user['username'] == userData['username'] and user['password'] == userData['password']:
-            return jsonify({'message': 'User logged in successfully!'}), 200
-    return jsonify({'message': 'Username and/or password incorrect!'}), 401
+            return jsonify({'authenticated': True, 'message': 'User logged in successfully!'}), 200
+    return jsonify({'authenticated': False, 'message': 'Username and/or password incorrect!'}), 401
 
 # Get all products
 @app.route('/products/info', methods=['GET'])
