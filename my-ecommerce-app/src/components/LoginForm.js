@@ -34,16 +34,17 @@ const LoginForm = () => {
                 <div>
                     <section class = "Login-Title" style={{padding:10}}>
                         <h2>Login</h2>
+                        {loginMessage && <p className='Login-Message' style={{color:'red'}}>{loginMessage}</p>}
                     </section>
                     <section class = "Login-Form" style={{padding:2}}>
-                        <form>
+                        <form onSubmit={handleLoginSubmit}>
                             <div>
                                 <label htmlFor="username">Username:</label>
-                                <input type="text" id="username" name="username" placeholder="Enter your username" required/>
+                                <input type="text" id="username" name="username" placeholder="Enter your username" value={username} onChange={handleUsernameChange} required/>
                             </div>
                             <div>
                                 <label htmlFor="password">Password:</label>
-                                <input type="password" id="password" name="password" placeholder="Enter your password" required/>
+                                <input type="password" id="password" name="password" placeholder="Enter your password" value={password} onChange={handleUsernameChange} required/>
                             </div>
                             <div>
                                 <button type="submit">Login</button>
@@ -54,7 +55,7 @@ const LoginForm = () => {
                         </div>
                     </section>
                 </div>
-            )};
+            )}
         </main>
     );
 };
