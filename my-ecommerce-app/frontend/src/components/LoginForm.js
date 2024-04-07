@@ -57,6 +57,7 @@ const LoginForm = () => {
                     return response.json();
                 } else {
                     setLoginStatus(false);
+                    localStorage.setItem('loginStatus', 'false');
                     setLoginMessage('Username and/or password incorrect!');
                     throw new Error('Username and/or password incorrect! ' + response.status);
                 }

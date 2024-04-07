@@ -100,9 +100,9 @@ def login():
             return jsonify({'message': 'User logged in successfully!'}), 200
     return jsonify({'message': 'Username and/or password incorrect!'}), 401
 
+# Get all products
 @app.route('/products/info', methods=['GET'])
 def get_products():
-    
     return jsonify(products)
 
 if __name__ == '__main__':
