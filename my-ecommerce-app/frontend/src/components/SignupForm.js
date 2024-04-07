@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
 
 const SignupForm = () => {
@@ -32,33 +31,75 @@ const SignupForm = () => {
 
     const handleSignupSubmit = async (event) => {
         event.preventDefault();
+
+        if (username === '' || password === '' || cPassword === '' || email === '') {
+            setSignupStatus('All fields required!');
+            return;
+        }
+
+        if (password !== cPassword) {
+            setSignupStatus('Passwords do not match!');
+            return;
+        }
+
+        const user = {
+            username: username,
+            password: password,
+            email: email
+        };
+
+        fetch('http://localhost:5000/login/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+            .then(response => {
+                if (response.ok) {
+                    setSignupStatus('User signed up successfully!');
+                    setUsername('');
+                    setPassword('');
+                    setCPassword('');
+                    setEmail('');
+                    return response.json();
+                } else if (response.status === 409) {
+                    setSignupStatus('Username is already taken!');
+                    throw new Error('Username is already taken!');
+                } else {
+                    setSignupStatus('Could not register user! Something went wrong! Check console for more info!');
+                    throw new Error('Could not register user! Something went wrong! Error: ' + response.status);
+                }
+            })
+            .then(data => { console.log(data.message) })
+            .catch(error => { console.error(error) });
     };
 
     return (
         <main>
             {showLogin ? (<LoginForm />) : (
                 <div>
-                    <section class = "Signup-Title" style={{padding:10}}>
+                    <section className="Signup-Title" style={{ padding: 10 }}>
                         <h2>Signup</h2>
-                        {signupStatus && <p className='Signup-Message' style={{color:'red'}}>{signupStatus}</p>}
+                        {signupStatus && <p className="Signup-Message" style={{ color: "red" }}>{signupStatus}</p>}
                     </section>
-                    <section class = "Signup-Form" style={{padding:2}}>
+                    <section className="Signup-Form" style={{ padding: 2 }}>
                         <form onSubmit={handleSignupSubmit}>
                             <div>
                                 <label htmlFor="username">Username:</label>
-                                <input type="text" id="username" name="username" value={username} onChange={handleUsernameChange} placeholder="Enter your username" required/>
+                                <input type="text" id="username" name="username" value={username} onChange={handleUsernameChange} placeholder="Enter your username" />
                             </div>
                             <div>
                                 <label htmlFor="password">Password:</label>
-                                <input type="password" id="password" name="password" value={password} onChange={handlePasswordChange} placeholder="Enter your password" required/>
+                                <input type="password" id="password" name="password" value={password} onChange={handlePasswordChange} placeholder="Enter your password" />
                             </div>
                             <div>
                                 <label htmlFor="password">Confirm Password:</label>
-                                <input type="password" id="cpassword" name="cpassword" value={cPassword} onChange={handleCPasswordChange} placeholder="Confirm your password" required/>
+                                <input type="password" id="cpassword" name="cpassword" value={cPassword} onChange={handleCPasswordChange} placeholder="Confirm your password" />
                             </div>
                             <div>
                                 <label htmlFor="email">Email:</label>
-                                <input type="email" id="email" name="email" value={email} onChange={handleEmailChange} placeholder="Enter your email" required/>
+                                <input type="email" id="email" name="email" value={email} onChange={handleEmailChange} placeholder="Enter your email" />
                             </div>
                             <div>
                                 <button type="submit">Signup</button>
