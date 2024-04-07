@@ -22,11 +22,11 @@ const LoginForm = () => {
 
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
-    }
+    };
 
     const handleLoginSubmit = async (event) => {
         event.preventDefault();
-    }
+    };
 
     return (
         <main>
